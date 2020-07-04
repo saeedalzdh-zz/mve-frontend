@@ -1,4 +1,4 @@
-import React, { MouseEvent } from 'react';
+import React from 'react';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Paper from '@material-ui/core/Paper';
 import Container from '@material-ui/core/Container';
@@ -10,13 +10,34 @@ import Grid from '@material-ui/core/Grid';
 import Checkbox from '@material-ui/core/Checkbox';
 import './Todo.css';
 
-
 class Todo extends React.PureComponent<any, any> {
 	constructor(props: any) {
 		super(props);
 
 		this.state = {
-			tasks: ['task1', 'task2']
+			tasks: [
+				{
+					id: 1,
+					title: 'Task 1',
+					completed: 0,
+					created_at: '2020-07-04T07:17:47.000Z',
+					updated_at: '2020-07-04T07:17:47.000Z'
+				},
+				{
+					id: 2,
+					title: 'Task 2',
+					completed: 0,
+					created_at: '2020-07-04T07:17:47.000Z',
+					updated_at: '2020-07-04T07:17:47.000Z'
+				},
+				{
+					id: 3,
+					title: 'Task 3',
+					completed: 0,
+					created_at: '2020-07-04T07:17:47.000Z',
+					updated_at: '2020-07-04T07:17:47.000Z'
+				}
+			]
 		}
 	}
 
@@ -25,14 +46,20 @@ class Todo extends React.PureComponent<any, any> {
 			this.setState({
 				tasks: [
 					...this.state.tasks,
-					event.target.value
+					{
+						id: Math.floor(Math.random() * 100),
+						title: event.target.value,
+                        completed: false
+					}
 				]
 			})
 		}
 	}
 
-	handleDeleteTask = (index: number) => {
+	handleDeleteTask = (id: number) => {
 		const tasks = [...this.state.tasks];
+		const item = tasks.find(item => item.id === id);
+		const index = tasks.indexOf(item);
 		tasks.splice(index, 1);
 		
 		this.setState({
@@ -40,22 +67,44 @@ class Todo extends React.PureComponent<any, any> {
 		});
 	}
 
+	toggleCompleteTask = (id: number) => {
+		const tasks = [...this.state.tasks];
+		const newTasks: any[] = [];
 
-	generateTaskList(task: string, key: number) {
+		tasks.forEach(element => {
+		if (id === element.id) {
+			newTasks.push({
+				...element,
+				completed: !element.completed
+			});
+		} else {
+			newTasks.push(element);
+		}
+	   })
+		this.setState({
+			tasks: newTasks
+		})
+	}
+
+	generateTaskList(task: any) {
+		const { id, title, completed } = task;
+
 		return (
-			<Paper className="paper" key={key}>
+			<Paper className="paper" key={id}>
 				<Grid container spacing={3}>
 					<Grid item xs={2}>
 						<Checkbox
 							name="checkedB"
 							color="primary"
+							onChange={() => this.toggleCompleteTask(id)}
+							checked={!!completed}
 						/>
 					</Grid>
 					<Grid item xs={8}>
-						<Typography noWrap>{task}</Typography>
+						<Typography noWrap>{title}</Typography>
 					</Grid>
 					<Grid item xs={2}>
-						<IconButton aria-label="delete" onClick={() => this.handleDeleteTask(key)} >
+						<IconButton aria-label="delete" onClick={() => this.handleDeleteTask(id)} >
 							<DeleteIcon />
 						</IconButton>
 					</Grid>
