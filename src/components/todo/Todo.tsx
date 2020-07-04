@@ -10,7 +10,6 @@ import Grid from '@material-ui/core/Grid';
 import Checkbox from '@material-ui/core/Checkbox';
 import './Todo.css';
 
-const message = 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Cumque laborum reprehenderit, delectus consequatur incidunt aperiam repellat ex nisi fuga modi. Repudiandae maiores blanditiis dolorem error illum inventore sunt facere atque!';
 
 class Todo extends React.PureComponent<any, any> {
 	constructor(props: any) {
@@ -19,11 +18,9 @@ class Todo extends React.PureComponent<any, any> {
 		this.state = {
 			tasks: ['task1', 'task2']
 		}
-
-		this.handleAddNewTask = this.handleAddNewTask.bind(this);
 	}
 
-	handleAddNewTask(event: any) {
+	handleAddNewTask = (event: any) => {
 		if (event.keyCode === 13) {
 			this.setState({
 				tasks: [
@@ -34,7 +31,7 @@ class Todo extends React.PureComponent<any, any> {
 		}
 	}
 
-	handleDeleteTask(index: number) {
+	handleDeleteTask = (index: number) => {
 		const tasks = [...this.state.tasks];
 		tasks.splice(index, 1);
 		
@@ -42,6 +39,7 @@ class Todo extends React.PureComponent<any, any> {
 			tasks
 		});
 	}
+
 
 	generateTaskList(task: string, key: number) {
 		return (
@@ -57,7 +55,7 @@ class Todo extends React.PureComponent<any, any> {
 						<Typography noWrap>{task}</Typography>
 					</Grid>
 					<Grid item xs={2}>
-						<IconButton aria-label="delete" onClick={this.handleDeleteTask.bind(this, key)} >
+						<IconButton aria-label="delete" onClick={() => this.handleDeleteTask(key)} >
 							<DeleteIcon />
 						</IconButton>
 					</Grid>
